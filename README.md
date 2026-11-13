@@ -50,6 +50,21 @@ la carpeta con `Asistente de Reuniones.exe`; crea un acceso directo en el escrit
 > clic derecho sobre ella → *Abrir* → *Abrir*. En Windows, si SmartScreen avisa:
 > *Más información* → *Ejecutar de todas formas*. Pasa porque la app no está firmada.
 
+### Si no se instala en algún computador
+
+- **Primero descomprime.** Si abres `Iniciar` desde dentro del .zip no funciona: clic derecho
+  sobre el .zip → *Extraer todo…* y abre la carpeta extraída.
+- **No copies la carpeta `.venv` de otro computador.** Ahora el iniciador lo detecta y la rehace
+  solo, pero lo más limpio es copiar la carpeta sin `.venv`.
+- **Python de Microsoft Store o sin "tcl/tk":** instala el de python.org; si ya lo tienes,
+  abre su instalador → *Modify* → marca *tcl/tk and IDLE*.
+- **Red de empresa:** muchas bloquean las descargas de Python (pip). Prueba con otra red o
+  usa el .exe ya construido (GitHub Actions, abajo).
+- **Mac con Intel vs. chip Apple:** GitHub Actions ahora construye ambas versiones
+  (`Mac-Intel` y `Mac-AppleSilicon`); descarga la que corresponde.
+- Si algo falla, el iniciador muestra las últimas líneas de `instalacion.log`, y si la app no
+  arranca aparece una ventana con el error (también queda en `error_arranque.txt`).
+
 ## 2. Configúrala (una sola vez, ~20 min)
 
 Abre la app y ve a **Ajustes**:

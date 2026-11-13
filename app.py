@@ -12,9 +12,35 @@ import tkinter.font as tkfont
 from tkinter import filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
 
-from dotenv import dotenv_values
 
-import asistente as core
+
+def _fatal(msg):
+    """Muestra un error de arranque en una ventana (con pythonw no hay consola donde verlo)."""
+    try:
+        log = os.path.join(os.path.dirname(os.path.abspath(__file__)), "error_arranque.txt")
+        with open(log, "w", encoding="utf-8") as f:
+            f.write(msg)
+    except Exception:  # noqa: BLE001
+        log = None
+    try:
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror("Asistente de Reuniones - no pudo arrancar",
+                             msg[-1500:] + (f"\n\n(Guardado en {log})" if log else ""))
+        root.destroy()
+    except Exception:  # noqa: BLE001
+        print(msg, file=sys.stderr)
+    sys.exit(1)
+
+
+try:
+    from dotenv import dotenv_values
+
+    import asistente as core
+except Exception:  # noqa: BLE001
+    import traceback
+    _fatal("Falta una pieza de la app o está dañada.\n"
+           "Borra la carpeta .venv y vuelve a abrir \"Iniciar\".\n\n" + traceback.format_exc())
 
 APP_NAME = "Asistente de Reuniones"
 INTERVAL = dt.timedelta(minutes=5)
@@ -607,7 +633,12 @@ class App(tk.Tk):
 
 
 def main():
-    App().mainloop()
+    try:
+        app = App()
+    except Exception:  # noqa: BLE001
+        import traceback
+        _fatal(traceback.format_exc())
+    app.mainloop()
 
 
 if __name__ == "__main__":

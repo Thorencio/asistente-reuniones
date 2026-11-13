@@ -10,8 +10,15 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest]
+        include:
+          - os: windows-latest
+            nombre: Windows
+          - os: macos-latest        # Mac con chip Apple (M1, M2, M3, M4…)
+            nombre: Mac-AppleSilicon
+          - os: macos-15-intel      # Mac con procesador Intel (antes de 2020)
+            nombre: Mac-Intel
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -21,11 +28,11 @@ jobs:
       - run: python construir.py
       - name: Comprimir (Windows)
         if: runner.os == 'Windows'
-        run: Compress-Archive -Path "dist/Asistente de Reuniones" -DestinationPath AsistenteReuniones-Windows.zip
+        run: Compress-Archive -Path "dist/Asistente de Reuniones" -DestinationPath AsistenteReuniones-${{ matrix.nombre }}.zip
       - name: Comprimir (Mac)
         if: runner.os == 'macOS'
-        run: cd dist && ditto -c -k --keepParent "Asistente de Reuniones.app" ../AsistenteReuniones-Mac.zip
+        run: cd dist && ditto -c -k --keepParent "Asistente de Reuniones.app" "../AsistenteReuniones-${{ matrix.nombre }}.zip"
       - uses: actions/upload-artifact@v4
         with:
-          name: AsistenteReuniones-${{ runner.os }}
+          name: AsistenteReuniones-${{ matrix.nombre }}
           path: AsistenteReuniones-*.zip
