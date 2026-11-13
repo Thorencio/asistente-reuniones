@@ -1,0 +1,43 @@
+# Copia este archivo como config.yaml y complétalo.
+
+mi_nombre: "Tu Nombre"               # como apareces en las reuniones (para detectar menciones)
+mi_correo: "tu.correo@gmail.com"     # donde llegan los resúmenes
+nombre_bot: "Notas de Tu Nombre"     # nombre visible del bot en la reunión
+
+calendario: primary                  # o el ID de otro calendario de Google
+horizonte_horas: 24                  # cuánto mira hacia adelante en cada pasada
+modelo: claude-sonnet-5-5
+
+# Proveedor de transcripción de Recall.ai (ver docs.recall.ai → Transcription).
+transcripcion:
+  recallai_streaming:
+    mode: prioritize_accuracy
+    language_code: es
+
+# ¿Qué cuenta como "reunión inútil"? Se revisa en este orden:
+filtro:
+  # 1. Si el título lleva alguno de estos marcadores, va el bot SIEMPRE.
+  marcadores: ["[bot]", "#bot"]
+
+  # 2. Si el título contiene alguna de estas, vas tú (nunca el bot).
+  nunca_si_titulo_contiene: ["1:1", "1-1", "entrevista", "cliente", "evaluación", "médico"]
+
+  # 3. Reuniones que organizas tú: vas tú.
+  excluir_si_organizo: true
+
+  # 4. Con menos asistentes que esto (contándote), vas tú: se notaría tu ausencia.
+  minimo_asistentes: 3
+
+  # 5. Colores de evento de Google Calendar que significan "manda el bot".
+  #    8 = Grafito (gris). Pinta de gris las reuniones que quieres saltarte.
+  colores: ["8"]
+
+  # 6. Palabras en el título que suelen delatar una reunión prescindible.
+  titulo_contiene:
+    - weekly
+    - sync
+    - status
+    - seguimiento
+    - all hands
+    - reunión de avance
+    - actualización

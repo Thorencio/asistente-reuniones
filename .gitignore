@@ -1,0 +1,14 @@
+.env
+token.json
+credentials.json
+config.yaml
+estado.json
+resumenes/
+log.txt
+.venv/
+__pycache__/
+build/
+dist/
+.venv-build/
+*.spec
+.venv/

@@ -1,0 +1,31 @@
+# Construye la app para Windows y Mac en la nube de GitHub (gratis en repos públicos y privados
+# dentro de la cuota). Súbelo a un repo y ve a Actions → "Construir app" → Run workflow.
+name: Construir app
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python construir.py
+      - name: Comprimir (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path "dist/Asistente de Reuniones" -DestinationPath AsistenteReuniones-Windows.zip
+      - name: Comprimir (Mac)
+        if: runner.os == 'macOS'
+        run: cd dist && ditto -c -k --keepParent "Asistente de Reuniones.app" ../AsistenteReuniones-Mac.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AsistenteReuniones-${{ runner.os }}
+          path: AsistenteReuniones-*.zip
