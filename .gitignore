@@ -12,3 +12,5 @@ dist/
 .venv-build/
 *.spec
 .venv/
+error_arranque.txt
+instalacion.log
